@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game of Life</title>
+
+  <!-- Our stylesheet -->
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ── TOP BAR ── -->
+  <header class="toolbar">
+
+    <span class="title">GAME OF LIFE</span>
+
+    <div class="controls">
+
+      <!-- Simulation buttons -->
+      <button id="btn-play"   class="btn btn--primary">▶ PLAY</button>
+      <button id="btn-step"   class="btn">STEP</button>
+      <button id="btn-clear"  class="btn">CLEAR</button>
+      <button id="btn-random" class="btn">RANDOM</button>
+
+      <div class="divider"></div>
+
+      <!-- Speed slider -->
+      <label class="slider-label">
+        SPEED
+        <input type="range" id="speed-slider" min="1" max="60" value="12" />
+      </label>
+
+      <div class="divider"></div>
+
+      <!-- Live stats -->
+      <div class="stat">
+        <span class="stat__name">GEN</span>
+        <span class="stat__value" id="stat-gen">0</span>
+      </div>
+
+      <div class="stat">
+        <span class="stat__name">ALIVE</span>
+        <span class="stat__value" id="stat-alive">0</span>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ── CANVAS AREA ── -->
+  <main class="viewport" id="viewport">
+
+    <!-- The canvas where everything is drawn -->
+    <canvas id="grid-canvas"></canvas>
+
+    <!-- Small zoom indicator bottom-left -->
+    <div class="zoom-badge">
+      ZOOM: <span id="zoom-label">1.00×</span>
+    </div>
+
+    <!-- Controls reminder bottom-right -->
+    <div class="hud">
+      WHEEL — zoom &nbsp;|&nbsp; RIGHT CLICK + DRAG — pan<br>
+      LEFT CLICK / DRAG — draw &nbsp;|&nbsp; SHIFT — erase
+    </div>
+
+  </main>
+
+  <!-- Our JS (loaded at the end so the DOM is ready) -->
+  <script src="js/main.js"></script>
+  <script src="js/object/game.js"></script>
+  <script src="js/object/grid.js"></script>
+  <script src="js/object/view_port.js"></script>
+
+</body>
+</html>

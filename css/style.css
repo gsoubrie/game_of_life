@@ -1,0 +1,177 @@
+/* ============================================================
+   GAME OF LIFE — style.css
+   ============================================================
+   We use CSS variables at the top so colors are easy to change.
+   ============================================================ */
+
+/* ── CSS VARIABLES (the color palette) ── */
+:root {
+  --color-bg:          #0a0c10;
+  --color-panel:       #0e1117;
+  --color-border:      #1e2a3a;
+  --color-accent:      #00ffc8;
+  --color-accent-dim:  rgba(0, 255, 200, 0.15);
+  --color-text:        #c8d8e8;
+  --color-text-dim:    #4a6070;
+
+  --font-mono:    'Share Tech Mono', monospace;
+  --font-display: 'Orbitron', sans-serif;
+}
+
+/* ── RESET ── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── BODY ── */
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-mono);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;   /* toolbar on top, canvas below */
+  overflow: hidden;
+}
+
+/* ── TOOLBAR ── */
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 20px;
+  background: var(--color-panel);
+  border-bottom: 1px solid var(--color-border);
+  flex-shrink: 0;           /* toolbar never shrinks */
+  flex-wrap: wrap;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 14px;
+  letter-spacing: 4px;
+  color: var(--color-accent);
+  text-shadow: 0 0 12px var(--color-accent);
+  white-space: nowrap;
+}
+
+/* ── CONTROLS GROUP ── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ── BUTTONS ── */
+.btn {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+}
+
+.btn:hover {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  box-shadow: 0 0 8px var(--color-accent-dim);
+}
+
+/* Primary button style (Play/Pause) */
+.btn--primary {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+}
+
+.btn--primary:hover {
+  background: var(--color-accent-dim);
+}
+
+/* ── DIVIDER ── */
+.divider {
+  width: 1px;
+  height: 20px;
+  background: var(--color-border);
+}
+
+/* ── SPEED SLIDER ── */
+.slider-label {
+  font-size: 11px;
+  color: var(--color-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: default;
+}
+
+.slider-label input[type="range"] {
+  width: 80px;
+  accent-color: var(--color-accent);
+  cursor: pointer;
+}
+
+/* ── STAT BOXES ── */
+.stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 48px;
+  gap: 2px;
+}
+
+.stat__name {
+  font-size: 10px;
+  color: var(--color-text-dim);
+}
+
+.stat__value {
+  font-size: 14px;
+  color: var(--color-accent);
+}
+
+/* ── CANVAS VIEWPORT ── */
+.viewport {
+  position: relative;
+  flex: 1;                  /* takes all remaining height */
+  overflow: hidden;
+  cursor: crosshair;
+  background: var(--color-bg);
+}
+
+#grid-canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* pixelated keeps cells crisp when zoomed in */
+  image-rendering: pixelated;
+}
+
+/* ── HUD OVERLAYS ── */
+.hud {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  font-size: 10px;
+  color: var(--color-text-dim);
+  text-align: right;
+  line-height: 1.8;
+  pointer-events: none;     /* clicks pass through */
+}
+
+.zoom-badge {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  color: var(--color-accent);
+  opacity: 0.6;
+  pointer-events: none;
+}
