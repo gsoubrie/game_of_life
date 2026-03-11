@@ -3,8 +3,8 @@ class Game {
 
   constructor() {
     // ── grid settings ──
-    this.grid_cols = 200;
-    this.grid_rows = 200;
+    this.grid_cols = 1000;
+    this.grid_rows = 1000;
 
     // ── create the two main objects ──
     this.grid     = new Grid(this.grid_cols, this.grid_rows);
