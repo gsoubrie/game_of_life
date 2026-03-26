@@ -41,30 +41,29 @@ class Game {
     init () {
         this.viewport.resize();
         this.viewport.centerOn( this.grid );
-        this.seedGlider();
+        this.initWithGlider();
         this.bindEvents();
         this.updateDomElements();
         this.viewport.draw( this.grid );
     }
     
-    seedGlider () {
-        const cx = Math.floor( this.grid_cols / 2 );
-        const cy = Math.floor( this.grid_rows / 2 );
+    initWithGlider () {
+        const index_x = Math.floor( this.grid_cols / 2 );
+        const index_y = Math.floor( this.grid_rows / 2 );
         
-        const pattern = [
+        const initial_glider = [
             [0, 1],
             [1, 2],
-            [2, 0], [2, 1], [2, 2]
+            [2, 0], 
+            [2, 1],
+            [2, 2]
         ];
         
-        for ( const [dc, dr] of pattern ) {
-            this.grid.setCell( cx + dc, cy + dr, 1 );
+        for ( let i = 0; i < initial_glider.length; i++ ) {
+            this.grid.setCell( index_x + initial_glider[i][0], index_y + initial_glider[i][1], 1 );
         }
     }
     
-    /* ── GAME LOOP ── */
-    
-    /** Start the automatic simulation */
     start () {
         if ( this.is_running ) {
             return;
@@ -84,10 +83,6 @@ class Game {
         }
     }
     
-    /**
-     * The main loop, called by requestAnimationFrame every ~16ms.
-     * We only step the simulation when enough time has passed (target_fps).
-     */
     loop ( timestamp ) {
         if ( !this.is_running ) {
             return;
