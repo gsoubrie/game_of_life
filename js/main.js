@@ -1,7 +1,7 @@
 "use strict";
 var controller = (function ( self ) {
     //********************************************  INIT  **************************************************//
-    self.init                     = function () {
+    self.init = function () {
         const game = new Game();
     };
     return self;
