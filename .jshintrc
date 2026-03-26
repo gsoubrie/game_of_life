@@ -24,6 +24,7 @@
   "laxbreak": true,
   "globals": {
     "Grid": false,
+    "ResizeObserver": false,
     "Game": false,
     "Viewport": false
   }

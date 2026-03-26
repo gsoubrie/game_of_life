@@ -5,71 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Game of Life</title>
 
-  <!-- Our stylesheet -->
   <link rel="stylesheet" href="css/style.css" />
 
-  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
-  <!-- ── TOP BAR ── -->
-  <header class="toolbar">
+  <div class="as-menu">
 
-    <span class="title">GAME OF LIFE</span>
+    <span class="title">Jeu de la vie</span>
 
-    <div class="controls">
+    <div class="as-controls">
 
-      <!-- Simulation buttons -->
-      <button id="btn-play"   class="btn btn--primary">▶ PLAY</button>
-      <button id="btn-step"   class="btn">STEP</button>
-      <button id="btn-clear"  class="btn">CLEAR</button>
-      <button id="btn-random" class="btn">RANDOM</button>
+      <button id="btn-play"   class="as-button as-play">▶ Jouer</button>
+      <button id="btn-step"   class="as-button">Pas à pas</button>
+      <button id="btn-clear"  class="as-button">Vider</button>
+      <button id="btn-random" class="as-button">Aléatoire</button>
 
-      <div class="divider"></div>
-
-      <!-- Speed slider -->
-      <label class="slider-label">
-        SPEED
+      <div class="as-slider-container">
+        <span>Vitesse</span>
         <input type="range" id="speed-slider" min="1" max="60" value="12" />
-      </label>
-
-      <div class="divider"></div>
-
-      <!-- Live stats -->
-      <div class="stat">
-        <span class="stat__name">GEN</span>
-        <span class="stat__value" id="stat-gen">0</span>
       </div>
 
-      <div class="stat">
-        <span class="stat__name">ALIVE</span>
-        <span class="stat__value" id="stat-alive">0</span>
+
+      <div class="as-statistics">
+        <span class="as-name">Génération</span>
+        <span class="as-value" id="stat-gen">0</span>
+      </div>
+
+      <div class="as-statistics">
+        <span class="as-name">Survivant</span>
+        <span class="as-value" id="stat-alive">0</span>
       </div>
 
     </div>
-  </header>
+  </div>
 
-  <!-- ── CANVAS AREA ── -->
-  <main class="viewport" id="viewport">
+  <main class="as-viewport" id="viewport">
 
-    <!-- The canvas where everything is drawn -->
     <canvas id="grid-canvas"></canvas>
 
-    <!-- Small zoom indicator bottom-left -->
-    <div class="zoom-badge">
-      ZOOM: <span id="zoom-label">1.00×</span>
+    <div class="as-zoom-container">
+      ZOOM: <span id="zoom-label">100%</span>
     </div>
 
-    <!-- Controls reminder bottom-right -->
-    <div class="hud">
-      WHEEL — zoom &nbsp;|&nbsp; RIGHT CLICK + DRAG — pan<br>
-      LEFT CLICK / DRAG — draw &nbsp;|&nbsp; SHIFT — erase
-    </div>
+	<div class="as-legend">
+	    <div class="as-desc">Zoom</div>
+	    <div class="as-action">Molette</div>
+
+	    <div class="as-desc">Déplacement</div>
+	    <div class="as-action">Click droit + drag</div>
+
+	    <div class="as-desc">Ajout de cellule</div>
+	    <div class="as-action">Click gauche + drag</div>
+
+	    <div class="as-desc">Suppression de cellule</div>
+	    <div class="as-action">Click gauche + Shift</div>
+	</div>
 
   </main>
 
-  <!-- Our JS (loaded at the end so the DOM is ready) -->
   <script src="js/main.js"></script>
   <script src="js/object/game.js"></script>
   <script src="js/object/grid.js"></script>

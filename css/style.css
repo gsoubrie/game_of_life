@@ -1,177 +1,162 @@
-/* ============================================================
-   GAME OF LIFE — style.css
-   ============================================================
-   We use CSS variables at the top so colors are easy to change.
-   ============================================================ */
-
-/* ── CSS VARIABLES (the color palette) ── */
-:root {
-  --color-bg:          #0a0c10;
-  --color-panel:       #0e1117;
-  --color-border:      #1e2a3a;
-  --color-accent:      #00ffc8;
-  --color-accent-dim:  rgba(0, 255, 200, 0.15);
-  --color-text:        #c8d8e8;
-  --color-text-dim:    #4a6070;
-
-  --font-mono:    'Share Tech Mono', monospace;
-  --font-display: 'Orbitron', sans-serif;
-}
-
-/* ── RESET ── */
-*, *::before, *::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-/* ── BODY ── */
 body {
-  background: var(--color-bg);
-  color: var(--color-text);
-  font-family: var(--font-mono);
-  height: 100vh;
-  display: flex;
-  flex-direction: column;   /* toolbar on top, canvas below */
-  overflow: hidden;
+    background     : #0A0C10;
+    color          : #C8D8E8;
+    font-family    : "Share Tech Mono", monospace;
+    height         : 100vh;
+    display        : flex;
+    flex-direction : column;
+    overflow       : hidden;
+}
+/*********************	MENU    ***********************************/
+.as-menu {
+    display       : flex;
+    align-items   : center;
+    gap           : 12px;
+    padding       : 10px 20px;
+    background    : #0E1117;
+    border-bottom : 1px solid #1E2A3A;
+    flex-shrink   : 0;
+    flex-wrap     : wrap;
 }
 
-/* ── TOOLBAR ── */
-.toolbar {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 20px;
-  background: var(--color-panel);
-  border-bottom: 1px solid var(--color-border);
-  flex-shrink: 0;           /* toolbar never shrinks */
-  flex-wrap: wrap;
+.as-menu .as-title {
+    font-family    : "Orbitron", sans-serif;
+    font-size      : 14px;
+    letter-spacing : 4px;
+    color          : #00FFC8;
+    text-shadow    : 0 0 12px #00FFC8;
+    white-space    : nowrap;
 }
 
-.title {
-  font-family: var(--font-display);
-  font-size: 14px;
-  letter-spacing: 4px;
-  color: var(--color-accent);
-  text-shadow: 0 0 12px var(--color-accent);
-  white-space: nowrap;
+.as-menu .as-controls {
+    display     : flex;
+    align-items : center;
+    gap         : 8px;
+    flex-wrap   : wrap;
 }
 
-/* ── CONTROLS GROUP ── */
-.controls {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+.as-menu .as-controls .as-button {
+    font-family    : "Share Tech Mono", monospace;
+    font-size      : 12px;
+    padding        : 6px 14px;
+    background     : transparent;
+    border         : 1px solid #1E2A3A;
+    color          : #C8D8E8;
+    cursor         : pointer;
+    letter-spacing : 1px;
+    transition     : border-color 0.15s, color 0.15s, box-shadow 0.15s;
 }
 
-/* ── BUTTONS ── */
-.btn {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  padding: 6px 14px;
-  background: transparent;
-  border: 1px solid var(--color-border);
-  color: var(--color-text);
-  cursor: pointer;
-  letter-spacing: 1px;
-  transition: border-color 0.15s, color 0.15s, box-shadow 0.15s;
+.as-menu .as-controls .as-button:hover {
+    border-color : #00FFC8;
+    color        : #00FFC8;
+    box-shadow   : 0 0 8px rgba(0, 255, 200, 0.15);
 }
 
-.btn:hover {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
-  box-shadow: 0 0 8px var(--color-accent-dim);
+.as-menu .as-controls .as-button.as-play {
+    border-color : #00FFC8;
+    color        : #00FFC8;
+    width        : 100px;
 }
 
-/* Primary button style (Play/Pause) */
-.btn--primary {
-  border-color: var(--color-accent);
-  color: var(--color-accent);
+.as-menu .as-controls .as-button.as-play:hover {
+    background : rgba(0, 255, 200, 0.15);
+}
+.as-menu .as-slider-container {
+    font-size   : 11px;
+    color       : #4A6070;
+    display     : flex;
+    align-items : center;
+    gap         : 6px;
+    cursor      : default;
 }
 
-.btn--primary:hover {
-  background: var(--color-accent-dim);
+.as-menu .as-slider-container input[type="range"] {
+    width        : 80px;
+    accent-color : #00FFC8;
+    cursor       : pointer;
 }
 
-/* ── DIVIDER ── */
-.divider {
-  width: 1px;
-  height: 20px;
-  background: var(--color-border);
+.as-menu .as-statistics {
+    display        : flex;
+    flex-direction : column;
+    align-items    : center;
+    min-width      : 48px;
+    gap            : 2px;
 }
 
-/* ── SPEED SLIDER ── */
-.slider-label {
-  font-size: 11px;
-  color: var(--color-text-dim);
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  cursor: default;
+.as-menu .as-statistics .as-name {
+    font-size : 10px;
+    color     : #4A6070;
 }
 
-.slider-label input[type="range"] {
-  width: 80px;
-  accent-color: var(--color-accent);
-  cursor: pointer;
+.as-menu .as-statistics .as-value {
+    font-size : 14px;
+    color     : #00FFC8;
+}
+/*********************	GRID    ***********************************/
+.as-viewport {
+    position   : relative;
+    flex       : 1;
+    overflow   : hidden;
+    cursor     : crosshair;
+    background : #0A0C10;
 }
 
-/* ── STAT BOXES ── */
-.stat {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-width: 48px;
-  gap: 2px;
+.as-viewport #grid-canvas {
+    position        : absolute;
+    top             : 0;
+    left            : 0;
+    image-rendering : pixelated;
 }
 
-.stat__name {
-  font-size: 10px;
-  color: var(--color-text-dim);
+.as-viewport .as-legend {
+    position              : absolute;
+    bottom                : 16px;
+    right                 : 16px;
+    font-size             : 10px;
+    color                 : white;
+    text-align            : right;
+    line-height           : 1.8;
+    pointer-events        : none;
+    display               : grid;
+    grid-template-columns : 1fr 220px;
+    gap                   : 6px 12px;
+    align-items           : center;
 }
 
-.stat__value {
-  font-size: 14px;
-  color: var(--color-accent);
+.as-viewport .as-legend .as-desc {
+    position      : relative;
+    padding-right : 16px;
+}
+.as-viewport .as-legend .as-desc::after {
+    content    : "";
+    position   : absolute;
+    right      : 0;
+    top        : 20%;
+    height     : 60%;
+    width      : 1px;
+    background : linear-gradient(
+            to bottom,
+            transparent,
+            #CCCCCC,
+            transparent
+    );
 }
 
-/* ── CANVAS VIEWPORT ── */
-.viewport {
-  position: relative;
-  flex: 1;                  /* takes all remaining height */
-  overflow: hidden;
-  cursor: crosshair;
-  background: var(--color-bg);
+.as-viewport .as-legend .as-action {
+    padding-left : 12px;
+    font-weight  : 600;
+    text-align   : left;
 }
 
-#grid-canvas {
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* pixelated keeps cells crisp when zoomed in */
-  image-rendering: pixelated;
-}
-
-/* ── HUD OVERLAYS ── */
-.hud {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
-  font-size: 10px;
-  color: var(--color-text-dim);
-  text-align: right;
-  line-height: 1.8;
-  pointer-events: none;     /* clicks pass through */
-}
-
-.zoom-badge {
-  position: absolute;
-  bottom: 16px;
-  left: 16px;
-  font-family: var(--font-display);
-  font-size: 11px;
-  color: var(--color-accent);
-  opacity: 0.6;
-  pointer-events: none;
+.as-viewport .as-zoom-container {
+    position       : absolute;
+    bottom         : 16px;
+    left           : 16px;
+    font-family    : "Orbitron", sans-serif;
+    font-size      : 11px;
+    color          : white;
+    opacity        : 0.6;
+    pointer-events : none;
 }
