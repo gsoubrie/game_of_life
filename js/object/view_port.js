@@ -9,23 +9,22 @@ class Viewport {
     constructor ( canvas, wrapper ) {
         this.canvas  = canvas;
         this.wrapper = wrapper;
-        this.ctx     = canvas.getContext( '2d' );
+        this.context = canvas.getContext( '2d' );
         
         this.zoom     = 1.0;
         this.min_zoom = 0.2;
         this.max_zoom = 8.0;
-        this.offset_x = 0;   // how many pixels the grid is shifted right
-        this.offset_y = 0;   // how many pixels the grid is shifted down
         
-        this.cell_size = 14;  // pixels per cell at zoom 1.0
+        this.offset_x = 0;
+        this.offset_y = 0;
+        
+        this.cell_size = 14;
     }
     
-    /** Size (in pixels) of one cell at the current zoom */
     getCellPixels () {
         return this.cell_size * this.zoom;
     }
     
-    /** Resize the canvas to fill its parent */
     resize () {
         this.canvas.width  = this.wrapper.clientWidth;
         this.canvas.height = this.wrapper.clientHeight;
@@ -93,27 +92,20 @@ class Viewport {
         return { col, row };
     }
     
-    /* ── drawing ── */
-    
-    /**
-     * Draw the entire grid onto the canvas.
-     * @param {Grid} grid
-     */
     draw ( grid ) {
-        const { ctx, canvas } = this;
-        const cell_px         = this.getCellPixels();
+        const cell_px = this.getCellPixels();
         
-        ctx.clearRect( 0, 0, canvas.width, canvas.height );
+        this.context.clearRect( 0, 0, this.canvas.width, this.canvas.height );
         
         // ── compute which cells are visible (avoid drawing off-screen cells) ──
         const col_min = Math.max( 0, Math.floor( -this.offset_x / cell_px ) );
         const row_min = Math.max( 0, Math.floor( -this.offset_y / cell_px ) );
-        const col_max = Math.min( grid.cols - 1, Math.ceil( (canvas.width - this.offset_x) / cell_px ) );
-        const row_max = Math.min( grid.rows - 1, Math.ceil( (canvas.height - this.offset_y) / cell_px ) );
+        const col_max = Math.min( grid.cols - 1, Math.ceil( (this.canvas.width - this.offset_x) / cell_px ) );
+        const row_max = Math.min( grid.rows - 1, Math.ceil( (this.canvas.height - this.offset_y) / cell_px ) );
         
         // ── dead-cell background ──
-        ctx.fillStyle = '#0D1520';
-        ctx.fillRect(
+        this.context.fillStyle = '#0D1520';
+        this.context.fillRect(
             col_min * cell_px + this.offset_x,
             row_min * cell_px + this.offset_y,
             (col_max - col_min + 1) * cell_px,
@@ -122,31 +114,31 @@ class Viewport {
         
         // ── grid lines (only when zoomed in enough) ──
         if ( this.zoom >= 0.5 ) {
-            ctx.strokeStyle = '#111E2A';
-            ctx.lineWidth   = 0.5;
-            ctx.beginPath();
+            this.context.strokeStyle = '#111E2A';
+            this.context.lineWidth   = 0.5;
+            this.context.beginPath();
             
             for ( let c = col_min; c <= col_max + 1; c++ ) {
                 const x = c * cell_px + this.offset_x;
-                ctx.moveTo( x, row_min * cell_px + this.offset_y );
-                ctx.lineTo( x, (row_max + 1) * cell_px + this.offset_y );
+                this.context.moveTo( x, row_min * cell_px + this.offset_y );
+                this.context.lineTo( x, (row_max + 1) * cell_px + this.offset_y );
             }
             for ( let r = row_min; r <= row_max + 1; r++ ) {
                 const y = r * cell_px + this.offset_y;
-                ctx.moveTo( col_min * cell_px + this.offset_x, y );
-                ctx.lineTo( (col_max + 1) * cell_px + this.offset_x, y );
+                this.context.moveTo( col_min * cell_px + this.offset_x, y );
+                this.context.lineTo( (col_max + 1) * cell_px + this.offset_x, y );
             }
-            ctx.stroke();
+            this.context.stroke();
         }
         
         // ── alive cells ──
-        ctx.fillStyle = '#00FFC8';
-        const pad     = this.zoom >= 1 ? 1 : 0; // small gap between cells when zoomed in
+        this.context.fillStyle = '#00FFC8';
+        const pad              = this.zoom >= 1 ? 1 : 0; // small gap between cells when zoomed in
         
         for ( let row = row_min; row <= row_max; row++ ) {
             for ( let col = col_min; col <= col_max; col++ ) {
                 if ( grid.getCell( col, row ) ) {
-                    ctx.fillRect(
+                    this.context.fillRect(
                         col * cell_px + this.offset_x + pad,
                         row * cell_px + this.offset_y + pad,
                         cell_px - pad * 2,
@@ -158,11 +150,11 @@ class Viewport {
         
         // ── glow effect (only when zoomed in) ──
         if ( this.zoom >= 1 ) {
-            ctx.fillStyle = 'rgba(0, 255, 200, 0.12)';
+            this.context.fillStyle = 'rgba(0, 255, 200, 0.12)';
             for ( let row = row_min; row <= row_max; row++ ) {
                 for ( let col = col_min; col <= col_max; col++ ) {
                     if ( grid.getCell( col, row ) ) {
-                        ctx.fillRect(
+                        this.context.fillRect(
                             col * cell_px + this.offset_x - 2,
                             row * cell_px + this.offset_y - 2,
                             cell_px + 4,

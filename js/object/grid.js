@@ -10,8 +10,6 @@ class Grid {
         this.cols = cols;
         this.rows = rows;
         
-        // Flat array: index = row * cols + col
-        // Uint8Array is memory-efficient (1 byte per cell instead of 8)
         this.cells      = new Uint8Array( cols * rows );
         this.next_cells = new Uint8Array( cols * rows ); // buffer for next gen
     }
