@@ -2,10 +2,6 @@
 
 class Grid {
     
-    /**
-     * @param {number} cols  - number of columns
-     * @param {number} rows  - number of rows
-     */
     constructor ( cols, rows ) {
         this.cols = cols;
         this.rows = rows;
@@ -71,6 +67,16 @@ class Grid {
                 
                 to_return += this.cells[ this.index( current_col, current_row ) ];
             }
+        }
+        
+        return to_return;
+    }
+    compute_next_value (row, col) {
+        const is_alive  = this.cells[ this.index( col, row ) ];
+        const number_neightbour = this.countNeighborsAlive( col, row );
+        
+        if ( is_alive && (number_neightbour === 2 || number_neightbour === 3)  ){
+            return 1;
         }
         
         return to_return;
