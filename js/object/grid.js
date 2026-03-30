@@ -11,34 +11,27 @@ class Grid {
         this.rows = rows;
         
         this.cells      = new Uint8Array( cols * rows );
-        this.next_cells = new Uint8Array( cols * rows ); // buffer for next gen
+        this.next_cells = new Uint8Array( cols * rows );
     }
     
-    /* ── helpers ── */
-    
-    /** Convert (col, row) into a flat array index */
     index ( col, row ) {
         return row * this.cols + col;
     }
     
-    /** Is this (col, row) inside the grid? */
     isInside ( col, row ) {
         return col >= 0 && col < this.cols && row >= 0 && row < this.rows;
     }
     
-    /** Get the value of a cell (0 or 1) */
     getCell ( col, row ) {
         return this.cells[ this.index( col, row ) ];
     }
     
-    /** Set the value of a cell (0 or 1) */
     setCell ( col, row, value ) {
         if ( this.isInside( col, row ) ) {
             this.cells[ this.index( col, row ) ] = value;
         }
     }
     
-    /** Count all alive cells */
     countAlive () {
         let count = 0;
         for ( let i = 0; i < this.cells.length; i++ ) {
@@ -49,77 +42,58 @@ class Grid {
         return count;
     }
     
-    /** Fill the grid randomly (~30% alive) */
     randomize () {
         for ( let i = 0; i < this.cells.length; i++ ) {
-            this.cells[ i ] = Math.random() < 0.30 ? 1 : 0;
+            this.cells[ i ] = Math.random() < 0.50 ? 1 : 0;
         }
     }
     
-    /** Kill every cell */
     clear () {
         this.cells.fill( 0 );
     }
     
-    /* ── simulation ── */
-    
-    /**
-     * Count how many of the 8 neighbours of (col, row) are alive.
-     * The grid wraps around (toroidal topology).
-     */
-    countNeighbors ( col, row ) {
-        let count = 0;
+    countNeighborsAlive ( col, row ) {
+        let to_return = 0;
         
-        for ( let dr = -1; dr <= 1; dr++ ) {
-            for ( let dc = -1; dc <= 1; dc++ ) {
-                
-                // skip the cell itself
-                if ( dr === 0 && dc === 0 ) {
+        for ( let delta_row = -1; delta_row<2; delta_row++ ) {
+            const current_row = row + delta_row;
+            if( current_row > this.rows || current_row < 0 ){
+                continue;
+            }
+            for ( let delta_col = -1; delta_col < 2; delta_col++ ) {
+                const current_col = col + delta_col;
+                if( current_col > this.cols || current_col < 0 ){
                     continue;
+                }                
+                if ( current_col === col && current_row === row ) {
+                    continue; 
                 }
                 
-                // wrap around borders using modulo
-                const neighbor_row = (row + dr + this.rows) % this.rows;
-                const neighbor_col = (col + dc + this.cols) % this.cols;
-                
-                count += this.cells[ this.index( neighbor_col, neighbor_row ) ];
+                to_return += this.cells[ this.index( current_col, current_row ) ];
             }
         }
         
-        return count;
+        return to_return;
     }
-    
-    /**
-     * Apply Conway's rules and advance to the next generation.
-     *
-     * Rules:
-     *  - A live cell with 2 or 3 neighbours survives.
-     *  - A dead cell with exactly 3 neighbours becomes alive.
-     *  - Everything else dies or stays dead.
-     */
+    compute_next_value (row, col) {
+        const is_alive  = this.cells[ this.index( col, row ) ];
+        const number_neightbour = this.countNeighborsAlive( col, row );
+        
+        if ( is_alive && (number_neightbour === 2 || number_neightbour === 3)  ){
+            return 1;
+        }
+        
+        if (!is_alive && number_neightbour === 3 ){
+            return 1;
+        }
+        return 0;
+    }
     step () {
         for ( let row = 0; row < this.rows; row++ ) {
-            for ( let col = 0; col < this.cols; col++ ) {
-                
-                const is_alive  = this.cells[ this.index( col, row ) ];
-                const neighbors = this.countNeighbors( col, row );
-                
-                let next_value = 0;
-                
-                if ( is_alive ) {
-                    // survival: 2 or 3 neighbours
-                    next_value = (neighbors === 2 || neighbors === 3) ? 1 : 0;
-                }
-                else {
-                    // birth: exactly 3 neighbours
-                    next_value = (neighbors === 3) ? 1 : 0;
-                }
-                
-                this.next_cells[ this.index( col, row ) ] = next_value;
+            for ( let col = 0; col < this.cols; col++ ) {                
+                this.next_cells[ this.index( col, row ) ] = this.compute_next_value(row, col);
             }
-        }
-        
-        // swap buffers (no memory allocation needed)
+        }        
         [this.cells, this.next_cells] = [this.next_cells, this.cells];
     }
 }
